@@ -1,0 +1,68 @@
+<?
+	
+	$application_title = "London2012 Delivery Management System";
+	
+	define('MYACTIVERECORD_CONNECTION_STR', 'mysql://root@localhost/cw1011');
+	include './include/MyActiveRecord.0.4.php';
+	
+	$classes = array('supplier','vehicle','delivery','venue');  //in this array we list all classes we like to CRUD manage from the main menu
+	
+	$foreign_keys = array('supplier_id','vehicle_id','delivery_id','venue_id','status_id'); // in this array we list all foreign keys 
+	
+	function name_child_relationship($class_name,$foreign_key)
+	{
+		if ($class_name == 'vehicle' && $foreign_key == 'supplier_id')
+		{
+			return " owned by ";
+		}
+		else if ($class_name == 'delivery' && $foreign_key == 'vehicle_id')
+		{
+			return " delivered by ";
+		}
+		else if ($class_name == 'delivery' && $foreign_key == 'venue_id')
+		{
+			return " at venue ";
+		}
+		else if ($class_name == 'delivery' && $foreign_key == 'status_id')
+		{
+			return " status ";
+		}
+	}
+	
+	$objects = array();
+	
+	class supplier extends MyActiveRecord{
+			function destroy(){
+			}	
+		}
+		
+	class vehicle extends MyActiveRecord{
+			function destroy(){
+			}	
+		}
+		
+	class delivery extends MyActiveRecord{
+			function destroy(){
+			}	
+		}
+		
+	class venue extends MyActiveRecord{
+			function destroy(){
+			}	
+		}
+	
+	class status extends MyActiveRecord{
+			function destroy(){
+			}	
+		}
+	
+	
+	for ($i=0;$i< count($classes); $i++)
+	{
+		$classname = $classes[$i]."";
+		//echo "<p>".$classname."<p>";
+		$objects[$i] = MyActiveRecord::FindBySql($classes[$i], 'SELECT * FROM '.$classes[$i].' WHERE id > 0 ORDER BY referred_as');
+		//print_r($objects[$i]);
+	}
+	
+?>
